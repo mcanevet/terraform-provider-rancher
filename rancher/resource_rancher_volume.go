@@ -99,6 +99,12 @@ func resourceRancherVolumeRead(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
+	if removed(volume.State) {
+		log.Printf("[INFO] Volume %s was removed on %v", d.Id(), volume.Removed)
+		d.SetId("")
+		return nil
+	}
+
 	log.Printf("[INFO] Volume Name: %s", volume.Name)
 
 	d.Set("description", volume.Description)
